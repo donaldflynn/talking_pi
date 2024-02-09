@@ -1,13 +1,9 @@
-@echo off
-echo This script should be run from the top level buggy-cloud directory.
-echo Logging into AWS ECR docker container registry. You will need buggy set up as an AWS credentials profile for this.
-echo.
-REM log in to docker
-
-
 echo.
 echo Building and pushing image
 echo.
 
-docker build -t donaldflynn/talking_pi:latest .
-docker push donaldflynn/talking_pi:latest
+REM Switch current working directory to parent directory of this folder
+cd %~dp0..\
+
+
+docker buildx build --push --platform "linux/arm/v7,linux/arm64/v8,linux/amd64" -t "donaldflynn/talking_pi:latest" .
