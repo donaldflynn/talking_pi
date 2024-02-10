@@ -12,17 +12,8 @@ RUN apt-get update && \
     python3-pip \
     alsa-base \
     alsa-utils \
+    nano \
     && rm -rf /var/lib/apt/lists/*
-#
-## Add the pulseaudio repository
-#RUN apt-get update && \
-#    apt-get install -y software-properties-common && \
-#    add-apt-repository -y ppa:ubuntu-audio-dev/pulse-testing && \
-#    apt-get update
-#
-## Install pulseaudio
-#RUN apt-get install -y pulseaudio
-
 
 
 # Copy all files into /app in the container - including the requirements.txt
@@ -33,5 +24,8 @@ COPY . .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 
-# Copy alsa configuration
-COPY alsa_config/default.conf /etc/modprobe.d/default.conf
+# Share the audio devices with the container - use USB audio
+RUN echo "defaults.pcm.card 3\ndefaults.ctl.card 3" > /etc/asound.conf
+
+# Set permissions for audio devices
+RUN usermod -aG audio root
