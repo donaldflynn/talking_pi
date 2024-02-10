@@ -1,4 +1,4 @@
 SpeechRecognition
 pydub
-gtts
 openai
+google-cloud-texttospeech
