@@ -1,38 +1,37 @@
 import speech_recognition as sr
-from gtts import gTTS
-import datetime as dt
 from subprocess import call
 import os
 from openai import OpenAI
 from pydub import AudioSegment
+from .text_to_speech import TextToSpeech
+
 
 class TalkingPi:
 
-    def __init__(self):
+    def __init__(self, text_to_speech: TextToSpeech):
         self._openai_client = OpenAI()
-        self._tmp_path = "/app/talking_pi/tmp"
+        self._text_to_speech = text_to_speech
+        self._tmp_path = "/app/tmp/"
 
     @staticmethod
     def _play_wav(path: str):
         call(["aplay", path])
 
-    def play_mp3(self, path: str):
-        sound = AudioSegment.from_mp3(path)
-        export_file_name = self._tmp_path + "wav_sound.wav"
-        sound.export(export_file_name, format="wav")
-        self._play_wav(export_file_name)
-        os.remove(export_file_name)
-
     @staticmethod
     def quack():
         TalkingPi._play_wav("/app/src/resources/duck_quack.wav")
 
+    def play_mp3(self, filepath: str):
+        sound = AudioSegment.from_mp3(filepath)
+        export_path = self._tmp_path + "wav_sound.wav"
+        sound.export(export_path, format="wav")
+        self._play_wav(export_path)
+        os.remove(export_path)
+
     def play_text_as_speech(self, text: str):
-        tts = gTTS(text=text, lang='en')
-        file_name = self._tmp_path + "response"+dt.datetime.now().strftime("%H-%M-%S")+".mp3"
-        tts.save(file_name)
-        self.play_mp3(file_name)
-        os.remove(file_name)
+        mp3_filepath = self._text_to_speech.create_mp3_from_text(text)
+        self.play_mp3(mp3_filepath)
+        os.remove(mp3_filepath)
 
     def get_gpt_response(self, question: str):
         messages_to_send = [

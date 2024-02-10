@@ -1,5 +1,5 @@
-# Use the official Ubuntu 20.04 LTS image as the base image
-FROM ubuntu:20.04
+# Use the official Ubuntu 22.04 LTS image as the base image
+FROM ubuntu:22.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Set the working directory in the container

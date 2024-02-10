@@ -20,7 +20,7 @@ save and reboot
 
 - Start the docker container:
 docker run -it --rm --privileged=true --device /dev/snd \
--e GOOGLE_APPLICATION_CREDENTIALS=app/google_cloud_key.json \
+-e GOOGLE_APPLICATION_CREDENTIALS=/app/google_cloud_key.json \
 -e OPENAI_API_KEY=$(cat ~/talking_pi_credentials/openai) \
 -v ~/talking_pi_credentials/google_cloud_key.json:/app/google_cloud_key.json \
 donaldflynn/talking_pi
