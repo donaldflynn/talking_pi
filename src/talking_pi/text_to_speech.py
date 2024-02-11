@@ -7,7 +7,7 @@ class TextToSpeech:
     def __init__(self):
         self._client = texttospeech.TextToSpeechClient()
         self._voice = texttospeech.VoiceSelectionParams(
-            language_code="en-GB", name="en-GB-Studio-B"
+            language_code="en-GB", name="en-GB-Wavenet-B"
         )
         self._audio_config = texttospeech.AudioConfig(
             audio_encoding=texttospeech.AudioEncoding.MP3
