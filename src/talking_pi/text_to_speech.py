@@ -1,5 +1,6 @@
 from google.cloud import texttospeech
 import datetime as dt
+import time
 
 
 class TextToSpeech:
@@ -17,12 +18,15 @@ class TextToSpeech:
 
     def create_mp3_from_text(self, text: str) -> str:
         synthesis_input = texttospeech.SynthesisInput(text=text)
+        start_time = time.time()
         # Perform the text-to-speech request on the text input with the selected
         # voice parameters and audio file type
+        print(f"Sending to text-to-speech API: {text} ")
         response = self._client.synthesize_speech(
             input=synthesis_input, voice=self._voice, audio_config=self._audio_config
         )
         file_path = self._tmp_path + "response" + dt.datetime.now().strftime("%H-%M-%S") + ".mp3"
+        print(f"Recieved response in {time.time() - start_time} seconds")
         # The response's audio_content is binary.
         with open(file_path, "wb") as out:
             # Write the response to the output file.

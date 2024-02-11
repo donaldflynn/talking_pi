@@ -8,6 +8,7 @@ class AudioPlayer:
     def __init__(self):
         self._chunk = 1024
         self._tmp_path = "/app/tmp/"
+        self._audio_card = os.environ["AUDIO_CARD"]
 
     def play_wav(self, path: str):
         with wave.open(path, 'rb') as wf:

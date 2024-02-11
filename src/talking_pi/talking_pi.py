@@ -3,6 +3,7 @@ from openai import OpenAI
 from .text_to_speech import TextToSpeech
 from .audio_player import AudioPlayer
 from src.mood_prompts import Mood, main_header
+import time
 
 
 class TalkingPi:
@@ -32,10 +33,15 @@ class TalkingPi:
         return self._get_gpt_response(main_header[self.mood] + question)
 
     def _get_gpt_response(self, text: str):
+        start_time = time.time()
         messages_to_send = [
             {"role": "user", "content": text}]
+        print(f"Sending messages to gpt: {messages_to_send}")
         completion = self._openai_client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=messages_to_send,
             max_tokens=300)
-        return completion.choices[0].message.content
+        response = completion.choices[0].message.content
+        print(f"Recieved response in {time.time() - start_time} seconds from gpt: {response}")
+        return response
+

@@ -2,11 +2,13 @@
 
 import wave
 import sys
-
 import pyaudio
+import os
 
 
 CHUNK = 1024
+
+audio_card = int(os.environ["AUDIO_CARD"])
 
 if len(sys.argv) < 2:
     print(f'Plays a wave file. Usage: {sys.argv[0]} filename.wav')
@@ -20,7 +22,8 @@ with wave.open(sys.argv[1], 'rb') as wf:
     stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
                     channels=wf.getnchannels(),
                     rate=wf.getframerate(),
-                    output=True)
+                    output=True,
+                    output_device_index=audio_card)
 
     # Play samples from the wave file (3)
     while len(data := wf.readframes(CHUNK)):  # Requires Python 3.8+ for :=
