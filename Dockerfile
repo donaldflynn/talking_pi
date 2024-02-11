@@ -5,8 +5,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Set the working directory in the container
 WORKDIR /app
 
-
-
 # Install essential packages
 RUN apt-get -y update && \
     apt-get -y upgrade && \
@@ -40,5 +38,12 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy all files
 COPY . .
 
-# Share the audio devices with the container - use USB audio
-RUN echo "defaults.pcm.card 3\ndefaults.ctl.card 3" > /etc/asound.conf
+ENV AUDIO_CARD 3
+
+# audio devices with the container - use USB audio
+RUN echo "defaults.pcm.card $AUDIO_CARD\ndefaults.ctl.card $AUDIO_CARD" > /etc/asound.conf
+
+COPY scripts/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
