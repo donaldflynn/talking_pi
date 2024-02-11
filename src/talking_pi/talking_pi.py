@@ -5,8 +5,6 @@ from .audio_player import AudioPlayer
 from src.mood_prompts import Mood, main_header
 
 
-
-
 class TalkingPi:
 
     def __init__(self, text_to_speech: TextToSpeech,

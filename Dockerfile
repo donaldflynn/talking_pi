@@ -42,6 +42,3 @@ COPY . .
 
 # Share the audio devices with the container - use USB audio
 RUN echo "defaults.pcm.card 3\ndefaults.ctl.card 3" > /etc/asound.conf
-
-# Set permissions for audio devices
-RUN usermod -aG audio root
