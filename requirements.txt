@@ -2,3 +2,4 @@ SpeechRecognition
 pydub
 openai
 google-cloud-texttospeech
+pyaudio

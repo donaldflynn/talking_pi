@@ -5,17 +5,30 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Set the working directory in the container
 WORKDIR /app
 
-# Update apt packages and install necessary dependencies
+
+
+# Install essential packages
 RUN apt-get -y update && \
     apt-get -y upgrade && \
     apt-get install -y \
     python3 \
     python3-pip \
+    nano
+
+# Install ffmpeg in separate step as it's large
+RUN apt-get install -y ffmpeg
+
+# Install audio-related packages
+RUN apt-get install -y \
     alsa-base \
     alsa-utils \
-    ffmpeg \
-    nano \
-    && rm -rf /var/lib/apt/lists/*
+    libasound2-dev \
+    portaudio19-dev \
+    libportaudio2 \
+    libportaudiocpp0
+
+# Clean up apt cache
+RUN rm -rf /var/lib/apt/lists/*
 
 
 # Copy requirements.txt first to make use of caching
