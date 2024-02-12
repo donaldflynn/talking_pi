@@ -25,7 +25,7 @@ class TextToSpeech:
         response = self._client.synthesize_speech(
             input=synthesis_input, voice=self._voice, audio_config=self._audio_config
         )
-        file_path = self._tmp_path + "response" + dt.datetime.now().strftime("%H-%M-%S") + ".mp3"
+        file_path = self._tmp_path + "response" + dt.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f') + ".mp3"
         print(f"Recieved response in {time.time() - start_time} seconds")
         # The response's audio_content is binary.
         with open(file_path, "wb") as out:

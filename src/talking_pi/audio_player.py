@@ -2,6 +2,7 @@ import pyaudio
 import wave
 from pydub import AudioSegment
 import os
+import datetime as dt
 
 
 class AudioPlayer:
@@ -34,4 +35,8 @@ class AudioPlayer:
         sound.export(export_path, format="wav")
         self.play_wav(export_path)
         os.remove(export_path)
+
+    def play_mp3_in_queue_gen(self, filepath: str):
+        sound = AudioSegment.from_mp3(filepath)
+        export_path = self._tmp_path + f"{dt.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')}.wav"
 
