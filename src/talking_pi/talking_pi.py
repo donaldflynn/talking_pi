@@ -3,8 +3,8 @@ from .text_to_speech import TextToSpeech
 from .audio_player import AudioPlayer
 from .gpt_manager import GPTManager
 from src.mood_prompts import Mood, main_header
+import time
 import threading
-import queue
 
 
 class TalkingPi:
@@ -19,9 +19,6 @@ class TalkingPi:
         self._tmp_path = "/app/tmp/"
         self.mood = mood
 
-        # Turn on audio worker to play items in queue
-        threading.Thread(target=self._audio_player.work_on_audio_queue, daemon=True).start()
-
     def play_response_to_question(self, question: str):
         response = self.get_gpt_question_response(question)
         self.play_text_as_speech(response)
@@ -30,10 +27,12 @@ class TalkingPi:
         for sentence in self._gpt_manager.stream_sentence_response_gen(question):
             print(f"Extracted sentence from GPT response: {sentence}")
             mp3_filepath = self._text_to_speech.create_mp3_from_text(sentence)
-            self._audio_player.queue.put(mp3_filepath)
+            self._audio_player.put_item_in_mp3_playing_queue(mp3_filepath)
         print("Done handling sentences")
-        self._audio_player.queue.join()
-        print("Done")
+        self._audio_player.finished_adding_to_queues.set()
+        self._audio_player.finished_handling_audio.wait()
+        self._audio_player.finished_adding_to_queues.clear()
+        print("Done playing audio")
 
     def quack(self):
         self._audio_player.play_wav("/app/src/resources/duck_quack.wav")

@@ -42,7 +42,7 @@ class GPTManager:
             next_token = next_item.delta.content
             print(next_token)
             current_response += next_token
-            if (current_response.endswith(("!", ".", "?")) or
+            if (current_response.endswith(("!", ".", "?", ":", ";")) or
                     (len(current_response) > 20 and current_response.endswith(","))):
                 yield current_response
                 current_response = ""
